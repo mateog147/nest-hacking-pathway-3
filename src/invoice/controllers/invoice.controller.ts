@@ -7,12 +7,15 @@ import {
   Patch,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/providers/auth.guard';
 import { InvoiceDto } from '../models/invoice.dto';
 import { PatchInvoiceDto } from '../models/patch-invoice.dto';
 import { InvoiceService } from '../services/invoice.service';
 
 @Controller('invoice')
+@UseGuards(AuthGuard)
 export class InvoiceController {
   constructor(private invoiceService: InvoiceService) {}
   @Get()
