@@ -1,73 +1,236 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Endpoint test
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+#### Get all customers
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+```http
+  GET /customer
+```
+```
+[
+	{
+		"uuid": "b146b149-bd56-4877-a518-5abbdac01557",
+		"name": "customerOne",
+		"email": "customer1@mail.com",
+		"nit": "900123456"
+	},
+	{
+		"uuid": "f3689626-8b1d-439c-9696-5bcad7e5fe75",
+		"name": "customerTwo",
+		"email": "customer2@mail.com",
+		"nit": "901987654"
+	}
+]
 ```
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+#### Get customer by id
+```http
+  GET /customer/${id}
+```
+```
+{
+	"uuid": "c7250bbd-2045-49a1-8f3d-e8f1743425f6",
+	"name": "Newcustomer",
+	"email": "customer.new@mail.com",
+	"nit": "111222333",
+	"date": "Thu Nov 10 2022 16:07:56 GMT-0500 (hora estándar de Colombia)"
+}
+```
+#### Create new customer
+```http
+  POST /customer
+```
+Body:
+```
+	{
+		"name": "Newcustomer",
+		"email": "customer.new@mail.com",
+		"nit": "111222333"
+	}
+```
+Response:
+```
+{
+	"uuid": "1ddc64c0-56c0-40e0-83ee-16da62a4042f",
+	"name": "Newcustomer",
+	"email": "customer.new@mail.com",
+	"nit": "111222333"
+}
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+#### Edit specifics fields in customer
+```http
+  PATCH /customer/${id}
+```
+Body:
+```
+	{
+		"name": "Updated Patch"
+	}
+```
+Response:
+```
+{
+	"uuid": "1ddc64c0-56c0-40e0-83ee-16da62a4042f",
+	"name": "Updated Patch",
+	"email": "customer.new@mail.com",
+	"nit": "111222333"
+}
 ```
 
-## Support
+#### Edit all customer´s data
+```http
+  PUT /customer/${id}
+```
+Body:
+```
+	{
+		"name": "Updatedcustomer",
+		"email": "customer.PUT@mail.com",
+		"nit": "444555666"
+	}
+```
+Response:
+```
+{
+	"uuid": "8fd1a8e3-5147-473f-840f-62981b808a0c",
+	"name": "Updatedcustomer",
+	"email": "customer.PUT@mail.com",
+	"nit": "444555666"
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+#### Remove customer by id
+```http
+  DELETE /customer/${id}
+```
+```
+{
+	"response": true,
+	"date": "Thu Nov 10 2022 16:08:19 GMT-0500 (hora estándar de Colombia)"
+}
+```
+### Note: All the request for invoice enpoints must to have a Bearer token
+#### Get all invoices
 
-## Stay in touch
+```http
+  GET /invoice
+```
+```
+[
+	{
+		"uuid": "9aff5186-8754-421c-9470-1617abe56562",
+		"userUuid": "03fe624b-3972-4791-bcbf-347506d6d2cf",
+		"detail": {
+			"amount": 350,
+			"description": "Servicios y varios"
+		}
+	},
+	{
+		"uuid": "0b20457e-3c46-4795-9dc5-1d0c4951b4ec",
+		"userUuid": "27076dbb-0a04-4c7f-985a-108c47251ba3",
+		"detail": {
+			"amount": 120,
+			"description": "Cacharros"
+		}
+	}
+]
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+#### Get invoice by id
+```http
+  GET /invoice/${id}
+```
+```
+	{
+		"uuid": "0b20457e-3c46-4795-9dc5-1d0c4951b4ec",
+		"userUuid": "27076dbb-0a04-4c7f-985a-108c47251ba3",
+		"detail": {
+			"amount": 120,
+			"description": "Cacharros"
+		}
+	}
+```
+#### Create new invoice
+```http
+  POST /invoice
+```
+Body:
+```
+{
+	"userUuid": "ec85e513-08e9-49bc-ba63-45f73f0b55a4",
+	"detail": {
+		"amount": 3600,
+		"description": "Desarrollo de API REST en Nest"
+	}
+}
+```
+Response:
+```
+{
+	"uuid": "f8786315-cead-4330-aa31-000654378a3e",
+	"userUuid": "ec85e513-08e9-49bc-ba63-45f73f0b55a4",
+	"detail": {
+		"amount": 3600,
+		"description": "Desarrollo de API REST en Nest"
+	}
+}
+```
 
-## License
+#### Edit specifics fields in invoice
+  PATCH /invoice/${id}
+```
+Body:
+```
+	{
+		"userUuid": "1ddc64c0-56c0-40e0-83ee-16da62a4042f"
+	}
+```
+Response:
+```
+{
+	"uuid": "f8786315-cead-4330-aa31-000654378a3e",
+	"userUuid": "1ddc64c0-56c0-40e0-83ee-16da62a4042f",
+	"detail": {
+		"amount": 3600,
+		"description": "Desarrollo de API REST en Nest"
+	}
+}
+```
 
-Nest is [MIT licensed](LICENSE).
+#### Edit all invoice´s data
+```http
+  PUT /invoice/${id}
+```
+Body:
+```
+	{
+	"userUuid": "ec85e513-08e9-49bc-ba63-45f73f0b55a4",
+	"detail": {
+		"amount": 123,
+		"description": "Inoive actualizada con PUT"
+		}
+	}
+```
+Response:
+```
+{
+	"uuid": "bd8aea3c-8975-40dd-a66d-7f05e3f77e89",
+	"userUuid": "ec85e513-08e9-49bc-ba63-45f73f0b55a4",
+	"detail": {
+		"amount": 123,
+		"description": "Inoive actualizada con PUT"
+	}
+}
+```
+
+#### Remove invoice by id
+```http
+  DELETE /invoice/${id}
+```
+```
+{
+	"response": true,
+	"date": "Thu Nov 10 2022 16:08:19 GMT-0500 (hora estándar de Colombia)"
+}
+```
