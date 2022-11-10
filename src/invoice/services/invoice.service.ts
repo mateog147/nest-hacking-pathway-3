@@ -2,9 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InvoiceDto } from '../models/invoice.dto';
 import { v4 as uuid } from 'uuid';
 import { PatchInvoiceDto } from '../models/patch-invoice.dto';
+import { Invoice } from '../interfaces/invoice';
+import { CreateInvoiceDto } from '../models/create-invoice.dto';
 @Injectable()
 export class InvoiceService {
-  private invoices: InvoiceDto[] = [];
+  private invoices: Invoice[] = [];
 
   constructor() {
     this.invoices.push({
@@ -39,7 +41,7 @@ export class InvoiceService {
     return false;
   }
 
-  create(data: InvoiceDto): InvoiceDto {
+  create(data: CreateInvoiceDto): InvoiceDto {
     this.invoices.push({
       uuid: uuid(),
       userUuid: data.userUuid,
@@ -48,7 +50,7 @@ export class InvoiceService {
     return this.invoices[this.invoices.length - 1];
   }
 
-  update(id: string, invoiceDto: InvoiceDto): InvoiceDto {
+  update(id: string, invoiceDto: CreateInvoiceDto): InvoiceDto {
     const oldinvoice: InvoiceDto | undefined = this.invoices.find(
       (invoice) => invoice.uuid == id,
     );

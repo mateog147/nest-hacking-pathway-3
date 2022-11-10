@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { CustomerDto } from '../models/customer.dto';
 import { v4 as uuid } from 'uuid';
 import { PatchCustomerDto } from '../models/patch-customer.dto';
+import { CreateCustomerDto } from '../models/create-customer.dto';
+import { Customer } from '../interfaces/customer';
 
 @Injectable()
 export class CustomerService {
-  private customers: CustomerDto[] = [];
+  private customers: Customer[] = [];
   constructor() {
     this.customers.push({
       uuid: uuid(),
@@ -21,7 +23,7 @@ export class CustomerService {
     });
   }
 
-  getAll(): CustomerDto[] {
+  getAll(): Customer[] {
     return this.customers;
   }
 
@@ -29,7 +31,7 @@ export class CustomerService {
     return this.customers.find((customer) => customer.uuid == id);
   }
 
-  create(data: CustomerDto): CustomerDto {
+  create(data: CreateCustomerDto): CustomerDto {
     this.customers.push({
       uuid: uuid(),
       name: data.name,

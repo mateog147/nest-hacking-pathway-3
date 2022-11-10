@@ -8,14 +8,24 @@ import {
   Post,
   Put,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/providers/auth.guard';
+import { CreateInvoiceDto } from '../models/create-invoice.dto';
 import { InvoiceDto } from '../models/invoice.dto';
 import { PatchInvoiceDto } from '../models/patch-invoice.dto';
 import { InvoiceService } from '../services/invoice.service';
 
 @Controller('invoice')
 @UseGuards(AuthGuard)
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }),
+)
 export class InvoiceController {
   constructor(private invoiceService: InvoiceService) {}
   @Get()
@@ -40,14 +50,14 @@ export class InvoiceController {
   }
 
   @Post()
-  addNewinvoice(@Body() createinvoiceDto: InvoiceDto): InvoiceDto {
+  addNewinvoice(@Body() createinvoiceDto: CreateInvoiceDto): InvoiceDto {
     return this.invoiceService.create(createinvoiceDto);
   }
 
   @Put(':uuid')
   editExistinginvoice(
     @Param('uuid') uuid: string,
-    @Body() invoiceDto: InvoiceDto,
+    @Body() invoiceDto: CreateInvoiceDto,
   ): InvoiceDto {
     return this.invoiceService.update(uuid, invoiceDto);
   }

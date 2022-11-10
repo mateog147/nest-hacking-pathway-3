@@ -7,12 +7,22 @@ import {
   Patch,
   Post,
   Put,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CustomerService } from '../services/customer.service';
 import { CustomerDto } from '../models/customer.dto';
 import { PatchCustomerDto } from '../models/patch-customer.dto';
+import { CreateCustomerDto } from '../models/create-customer.dto';
 
 @Controller('customer')
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }),
+)
 export class CustomerController {
   constructor(private customerService: CustomerService) {}
 
@@ -34,7 +44,7 @@ export class CustomerController {
   }
 
   @Post()
-  addNewcustomer(@Body() createcustomerDto: CustomerDto): CustomerDto {
+  addNewcustomer(@Body() createcustomerDto: CreateCustomerDto): CustomerDto {
     return this.customerService.create(createcustomerDto);
   }
 

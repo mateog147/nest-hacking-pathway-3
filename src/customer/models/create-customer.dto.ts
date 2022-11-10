@@ -1,16 +1,8 @@
-import {
-  IsAlpha,
-  IsAlphanumeric,
-  IsEmail,
-  IsNotEmpty,
-  IsUUID,
-} from 'class-validator';
+import { IsAlpha, IsAlphanumeric, IsEmail, IsNotEmpty } from 'class-validator';
 import { Customer } from '../interfaces/customer';
 
-export class CustomerDto implements Customer {
-  @IsUUID()
-  @IsNotEmpty()
-  uuid: string;
+export class CreateCustomerDto implements Partial<Customer> {
+  uuid?: string;
   @IsAlpha()
   @IsNotEmpty()
   name: string;
