@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -37,13 +39,11 @@ export class InvoiceController {
 
   @Get(':uuid')
   getinvoiceByUid(@Param('uuid') uuid: string): InvoiceDto {
-    return (
-      this.invoiceService.getById(uuid) ?? {
-        uuid: '',
-        userUuid: '',
-        detail: { amount: 0, description: '' },
-      }
-    );
+    const invoice: InvoiceDto | undefined = this.invoiceService.getById(uuid);
+    if (invoice) {
+      return invoice;
+    }
+    throw new HttpException('customer id not found', HttpStatus.NOT_FOUND);
   }
 
   @Delete(':uuid')
@@ -70,12 +70,13 @@ export class InvoiceController {
     @Param('uuid') uuid: string,
     @Body() invoiceDto: PatchInvoiceDto,
   ): InvoiceDto {
-    return (
-      this.invoiceService.patch(uuid, invoiceDto) ?? {
-        uuid: '',
-        userUuid: '',
-        detail: { amount: 0, description: '' },
-      }
+    const invoice: InvoiceDto | undefined = this.invoiceService.patch(
+      uuid,
+      invoiceDto,
     );
+    if (invoice) {
+      return invoice;
+    }
+    throw new HttpException('customer id not found', HttpStatus.NOT_FOUND);
   }
 }

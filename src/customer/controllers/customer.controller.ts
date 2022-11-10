@@ -1,8 +1,11 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -23,6 +26,8 @@ import { DateInterceptor } from 'src/providers/date.interceptor';
     transform: true,
     whitelist: true,
     forbidNonWhitelisted: true,
+    exceptionFactory: () =>
+      new BadRequestException('Los datos suministrados son invalidos'),
   }),
 )
 export class CustomerController {
@@ -36,14 +41,13 @@ export class CustomerController {
   @Get(':uuid')
   @UseInterceptors(DateInterceptor)
   getcustomerByUid(@Param('uuid') uuid: string): CustomerDto {
-    return (
-      this.customerService.getById(uuid) ?? {
-        uuid: '',
-        name: '',
-        nit: '',
-        email: '',
-      }
-    );
+    const customer: CustomerDto | undefined =
+      this.customerService.getById(uuid);
+
+    if (customer) {
+      return customer;
+    }
+    throw new HttpException('customer id not found', HttpStatus.NOT_FOUND);
   }
 
   @Post()
@@ -70,13 +74,13 @@ export class CustomerController {
     @Param('uuid') uuid: string,
     @Body() customerDto: PatchCustomerDto,
   ): CustomerDto {
-    return (
-      this.customerService.patch(uuid, customerDto) ?? {
-        uuid: '',
-        name: '',
-        nit: '',
-        email: '',
-      }
+    const customer: CustomerDto | undefined = this.customerService.patch(
+      uuid,
+      customerDto,
     );
+    if (customer) {
+      return customer;
+    }
+    throw new HttpException('customer id not found', HttpStatus.NOT_FOUND);
   }
 }
