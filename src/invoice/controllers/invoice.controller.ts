@@ -8,10 +8,12 @@ import {
   Post,
   Put,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/providers/auth.guard';
+import { DateInterceptor } from 'src/providers/date.interceptor';
 import { CreateInvoiceDto } from '../models/create-invoice.dto';
 import { InvoiceDto } from '../models/invoice.dto';
 import { PatchInvoiceDto } from '../models/patch-invoice.dto';
@@ -45,6 +47,7 @@ export class InvoiceController {
   }
 
   @Delete(':uuid')
+  @UseInterceptors(DateInterceptor)
   removeinvoice(@Param('uuid') uuid: string): boolean {
     return this.invoiceService.remove(uuid);
   }

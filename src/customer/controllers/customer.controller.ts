@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Put,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { CustomerService } from '../services/customer.service';
 import { CustomerDto } from '../models/customer.dto';
 import { PatchCustomerDto } from '../models/patch-customer.dto';
 import { CreateCustomerDto } from '../models/create-customer.dto';
+import { DateInterceptor } from 'src/providers/date.interceptor';
 
 @Controller('customer')
 @UsePipes(
@@ -32,6 +34,7 @@ export class CustomerController {
   }
 
   @Get(':uuid')
+  @UseInterceptors(DateInterceptor)
   getcustomerByUid(@Param('uuid') uuid: string): CustomerDto {
     return (
       this.customerService.getById(uuid) ?? {
@@ -57,6 +60,7 @@ export class CustomerController {
   }
 
   @Delete(':uuid')
+  @UseInterceptors(DateInterceptor)
   removecustomer(@Param('uuid') uuid: string): boolean {
     return this.customerService.remove(uuid);
   }
